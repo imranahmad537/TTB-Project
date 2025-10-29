@@ -1385,7 +1385,7 @@ const Form = () => {
             <h1 className="text-3xl sm:text-4xl font-extrabold text-indigo-800">
               Affiliation & Registration Application
             </h1>
-            <p className="mt-2 text-md text-gray-600">
+            <p className="mt-2 font-bold text-md text-gray-600">
               GOVT OF KHYBER PAKHTUNKHWA TRADE TESTING BOARD
             </p>
           </div>
