@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import Form from './Pages/From'
+import Form from './Pages/Form'
 import './App.css'
 
 function App() {
