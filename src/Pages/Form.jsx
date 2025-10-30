@@ -671,6 +671,34 @@ const InputField = React.memo(
   }
 );
 
+// --- NEW COMPONENT FOR TEXT/LIST INPUT INSTEAD OF RADIO GROUP ---
+const ListOrTextField = React.memo(
+  ({
+    label,
+    name,
+    value,
+    error,
+    onChange,
+    onBlur,
+    placeholder = "Enter list items, details, or write 'File uploaded in Step 6'",
+  }) => {
+    return (
+      <InputField
+        label={label}
+        name={name}
+        rows={3}
+        value={value}
+        error={error}
+        onChange={onChange}
+        onBlur={onBlur}
+        placeholder={placeholder}
+        // Not marking as required here, assuming the data will be provided via file upload in Step 6 if not here.
+      />
+    );
+  }
+);
+// -----------------------------------------------------------------
+
 const RadioGroup = React.memo(
   ({ label, name, options = ["Yes", "No"], value, onChange }) => {
     const handleChange = (e) => onChange(name, e.target.value);
@@ -810,31 +838,31 @@ const Form = () => {
     address: "",
     dateStartClasses: "",
     requiredTrade: "",
-    // Step 2
-    staffStatementAttached: "No",
+    // Step 2 - Radio groups replaced with Text fields
+    staffStatementText: "", // NEW FIELD
     proposedAppointments: "",
     teachersAgreement: "No",
-    salaryScalesAttached: "No",
+    salaryScalesText: "", // NEW FIELD
     // Step 3
     endowmentFundSufficient: "No",
     endowmentFundBalance: "",
     annualIncomeSources: "",
     expectedFeeIncomeCalculation: "",
     annualExpenditureEstimate: "",
-    // Step 4
+    // Step 4 - Radio group replaced with Text field
     buildingOwned: "No",
-    linePlanAttached: "No",
+    linePlanText: "", // NEW FIELD
     longLease: "No",
     classRoomCount: "",
     classRoomsEquipped: "No",
     electricLightFitted: "No",
-    // Step 5
-    labEquipmentListAttached: "No",
-    appliedTradesEquipmentListAttached: "No",
-    libraryBooksListAttached: "No",
+    // Step 5 - Radio groups replaced with Text fields
+    labEquipmentListText: "", // NEW FIELD
+    appliedTradesEquipmentListText: "", // NEW FIELD
+    libraryBooksListText: "", // NEW FIELD
     amountSpent: "",
     futureBudget: "",
-    // Step 6 uploads
+    // Step 6 uploads (docNames adjusted to match previous logic)
     uploadedDocuments: {
       colorPage: null,
       messageMission: null,
@@ -1042,11 +1070,14 @@ const Form = () => {
             title={`${currentStepData.id}. ${currentStepData.title}`}
             description="Information regarding current and proposed teaching staff."
           >
-            <RadioGroup
-              label="Is the Staff statement (with qualification/number) attached/available?"
-              name="staffStatementAttached"
-              value={formData.staffStatementAttached}
-              onChange={handleRadioChange}
+            {/* CHANGED FROM RadioGroup to ListOrTextField */}
+            <ListOrTextField
+              label="1. Staff statement (with qualification/number) text/list or file attached?"
+              name="staffStatementText"
+              value={formData.staffStatementText}
+              error={validationErrors.staffStatementText}
+              {...inputProps}
+              placeholder="Enter list of staff, qualifications, and numbers, or state 'See file uploaded in Step 6 (Staff Statement)'"
             />
             <InputField
               label="If no statement provided, describe institution's proposed appointments."
@@ -1063,11 +1094,14 @@ const Form = () => {
               value={formData.teachersAgreement}
               onChange={handleRadioChange}
             />
-            <RadioGroup
-              label="Is the statement showing salary scales of pay and allowances attached/available?"
-              name="salaryScalesAttached"
-              value={formData.salaryScalesAttached}
-              onChange={handleRadioChange}
+            {/* CHANGED FROM RadioGroup to ListOrTextField */}
+            <ListOrTextField
+              label="2. Statement showing salary scales of pay and allowances text/list or file attached?"
+              name="salaryScalesText"
+              value={formData.salaryScalesText}
+              error={validationErrors.salaryScalesText}
+              {...inputProps}
+              placeholder="Enter salary scales/allowances details, or state 'See file uploaded in Step 6 (Salary Scales)'"
             />
           </StepWrapper>
         );
@@ -1135,11 +1169,14 @@ const Form = () => {
               value={formData.buildingOwned}
               onChange={handleRadioChange}
             />
-            <RadioGroup
-              label="Is a line plan attached?"
-              name="linePlanAttached"
-              value={formData.linePlanAttached}
-              onChange={handleRadioChange}
+            {/* CHANGED FROM RadioGroup to ListOrTextField */}
+            <ListOrTextField
+              label="3. Is a line plan attached/available? (Enter description or mention file upload)"
+              name="linePlanText"
+              value={formData.linePlanText}
+              error={validationErrors.linePlanText}
+              {...inputProps}
+              placeholder="Enter a brief description of the plan, or state 'See file uploaded in Step 6 (Building Map / Plan)'"
             />
             <RadioGroup
               label="Is it a long lease?"
@@ -1178,23 +1215,32 @@ const Form = () => {
             title={`${currentStepData.id}. ${currentStepData.title}`}
             description="Equipment, lab and library readiness and budgets."
           >
-            <RadioGroup
-              label="Lab equipment list attached?"
-              name="labEquipmentListAttached"
-              value={formData.labEquipmentListAttached}
-              onChange={handleRadioChange}
+            {/* CHANGED FROM RadioGroup to ListOrTextField */}
+            <ListOrTextField
+              label="4. Lab equipment list attached/available? (Enter list or mention file upload)"
+              name="labEquipmentListText"
+              value={formData.labEquipmentListText}
+              error={validationErrors.labEquipmentListText}
+              {...inputProps}
+              placeholder="Enter a list of lab equipment, or state 'See file uploaded in Step 6 (Equipment List)'"
             />
-            <RadioGroup
-              label="Applied trades equipment list attached?"
-              name="appliedTradesEquipmentListAttached"
-              value={formData.appliedTradesEquipmentListAttached}
-              onChange={handleRadioChange}
+            {/* CHANGED FROM RadioGroup to ListOrTextField */}
+            <ListOrTextField
+              label="5. Applied trades equipment list attached/available? (Enter list or mention file upload)"
+              name="appliedTradesEquipmentListText"
+              value={formData.appliedTradesEquipmentListText}
+              error={validationErrors.appliedTradesEquipmentListText}
+              {...inputProps}
+              placeholder="Enter a list of trades equipment, or state 'See file uploaded in Step 6 (Equipment List)'"
             />
-            <RadioGroup
-              label="Library books list attached?"
-              name="libraryBooksListAttached"
-              value={formData.libraryBooksListAttached}
-              onChange={handleRadioChange}
+            {/* CHANGED FROM RadioGroup to ListOrTextField */}
+            <ListOrTextField
+              label="6. Library books list attached/available? (Enter list or mention file upload)"
+              name="libraryBooksListText"
+              value={formData.libraryBooksListText}
+              error={validationErrors.libraryBooksListText}
+              {...inputProps}
+              placeholder="Enter a list of key library books, or state 'See file uploaded in Step 6 (Library Books List)'"
             />
             <div className="grid sm:grid-cols-2 gap-6">
               <InputField
@@ -1377,10 +1423,10 @@ const Form = () => {
   return (
     <div className="min-h-screen bg-gray-100 p-4 sm:p-8 font-sans">
       <div className="max-w-4xl mx-auto">
-       
+        
         <header className="text-center mb-10 bg-white p-6 rounded-xl shadow-lg flex justify-between">
-           <img src="/govt_logo.jpg" className="h-20 w-20 p-2" alt="govt logo" />
-           
+            <img src="/govt_logo.jpg" className="h-20 w-20 p-2" alt="govt logo" />
+            
           <div>
             <h1 className="text-3xl sm:text-4xl font-extrabold text-indigo-800">
               Affiliation & Registration Application
@@ -1428,18 +1474,15 @@ const Form = () => {
               <button
                 type="submit"
                 disabled={!isStepValid || isSubmitting}
-                className="px-6 py-2 text-md sm:px-8 sm:py-3 sm:text-lg font-semibold rounded-lg text-white bg-green-600 hover:bg-green-700 transition duration-150 shadow-lg focus:outline-none focus:ring-4 focus:ring-green-500 focus:ring-opacity-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-6 py-2 text-md sm:px-8 sm:py-3 sm:text-md font-semibold rounded-lg text-white bg-green-600 hover:bg-green-700 transition duration-150 shadow-md focus:outline-none focus:ring-4 focus:ring-green-500 focus:ring-opacity-50 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isSubmitting ? "Submitting..." : "Submit Application"}
               </button>
             )}
           </div>
-
           {submitMessage && (
-            <div className="text-center mt-6">
-              <p className="p-4 bg-green-100 text-green-700 rounded-xl font-medium shadow-md">
-                {submitMessage}
-              </p>
+            <div className="mt-4 p-4 text-center bg-green-50 border border-green-200 text-green-700 rounded-lg shadow-md">
+              {submitMessage}
             </div>
           )}
         </form>
